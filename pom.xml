@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.ppodgorsek.cache</groupId>
+	<artifactId>spring-data-cache-manager</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>spring-data-cache-manager</name>
+	<url>https://github.com/ppodgorsek/spring-data-cache-manager</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.java.version>1.7</project.java.version>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<config.path.prefix>./</config.path.prefix>
+	</properties>
+
+	<modules>
+		<module>spring-data-cache-manager-core</module>
+		<module>spring-data-cache-manager-cassandra</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.ppodgorsek.cache</groupId>
+				<artifactId>spring-data-cache-manager-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ppodgorsek.cache</groupId>
+				<artifactId>spring-data-cache-manager-cassandra</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>cglib</groupId>
+				<artifactId>cglib-nodep</artifactId>
+				<version>3.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>3.2.13.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-releasetrain</artifactId>
+				<version>Dijkstra-SR5</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>3.8.1</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${project.java.version}</source>
+					<target>${project.java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<downloadJavadocs>true</downloadJavadocs>
+					<downloadSources>true</downloadSources>
+
+					<additionalConfig>
+						<file>
+							<name>.settings/org.eclipse.jdt.core.prefs</name>
+							<location>${config.path.prefix}src/eclipse/org.eclipse.jdt.core.prefs</location>
+						</file>
+						<file>
+							<name>.settings/org.eclipse.jdt.ui.prefs</name>
+							<location>${config.path.prefix}src/eclipse/org.eclipse.jdt.ui.prefs</location>
+						</file>
+					</additionalConfig>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
