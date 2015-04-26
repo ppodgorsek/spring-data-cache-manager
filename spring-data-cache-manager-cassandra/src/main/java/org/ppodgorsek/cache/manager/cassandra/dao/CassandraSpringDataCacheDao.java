@@ -1,13 +1,14 @@
 package org.ppodgorsek.cache.manager.cassandra.dao;
 
-import java.io.Serializable;
-
-import org.ppodgorsek.cache.manager.cassandra.model.CassandraCachedValue;
+import org.ppodgorsek.cache.manager.core.annotation.CacheDao;
 import org.ppodgorsek.cache.manager.core.dao.SpringDataCacheDao;
+import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * @author Paul Podgorsek
  */
-public interface CassandraSpringDataCacheDao<VALUE extends Serializable> extends SpringDataCacheDao<CassandraCachedValue<VALUE>> {
+@CacheDao("cassandra")
+@NoRepositoryBean
+public interface CassandraSpringDataCacheDao extends SpringDataCacheDao {
 
 }

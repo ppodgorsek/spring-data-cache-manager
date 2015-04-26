@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.ppodgorsek.cache.manager.core.dao.SpringDataCacheDao;
-import org.ppodgorsek.cache.manager.core.model.CachedValue;
+import org.ppodgorsek.cache.manager.core.model.CacheEntry;
+import org.ppodgorsek.cache.manager.core.model.CacheEntryImpl;
 import org.ppodgorsek.cache.manager.core.model.EvictionStrategyType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,48 +14,63 @@ import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.util.Assert;
 
 /**
+ * TODO: each cache service should have a local cache that is used in priority, the Spring Data cache should be called asynchronously when persisting an entry
+ * in order to maximise performance.
+ * 
  * @author Paul Podgorsek
  */
 public class SpringDataCacheService implements Cache {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SpringDataCacheService.class);
 
-	private SpringDataCacheDao<CachedValue> dao;
+	private SpringDataCacheDao dao;
 
-	private Class<? extends CachedValue> entityType;
+	private String name;
 
 	private boolean eternal;
 
 	private EvictionStrategyType evictionStrategyType;
 
-	private long maxElementsInLocalCache;
+	private long maxEntries;
 
-	private long maxEntriesInDistantCache;
-
-	private boolean overflowToDisk;
-
+	/**
+	 * TODO: check how are stats used by ehcache
+	 */
 	private boolean statistics;
 
 	private long timeToLiveInSeconds;
 
 	/**
+	 * <p>
+	 * FIXME: useful?
+	 * </p>
+	 * <p>
+	 * All elements that are put in the cache will also be pushed to this other cache (ehcache for example).
+	 * </p>
+	 * 1
+	 * <p>
+	 * This would make the long maxEntriesInDistantCache obsolete
+	 * </p>
+	 */
+	private Cache backendCache;
+
+	/**
 	 * Create an {@link SpringDataCacheService} instance.
-	 *
+	 * 
 	 * @param cacheDao
 	 *            Backing Spring Data cache instance.
 	 */
-	public SpringDataCacheService(SpringDataCacheDao<CachedValue> cacheDao, Class<? extends CachedValue> clazz, long timeToLive,
-			EvictionStrategyType evictionStrategyType, long maxEntries) {
+	public SpringDataCacheService(String name, SpringDataCacheDao cacheDao, long timeToLive, EvictionStrategyType evictionStrategyType, long maxEntriesInCache) {
 
+		Assert.notNull(name, "The name is required");
 		Assert.notNull(cacheDao, "The cache DAO is required");
-		Assert.notNull(clazz, "The entity type is required");
 		Assert.notNull(evictionStrategyType, "The eviction strategy type is required");
 
 		dao = cacheDao;
-		entityType = clazz;
+		this.name = name;
 		timeToLiveInSeconds = timeToLive;
 		this.evictionStrategyType = evictionStrategyType;
-		maxEntriesInDistantCache = maxEntries;
+		maxEntries = maxEntriesInCache;
 	}
 
 	/**
@@ -71,7 +87,7 @@ public class SpringDataCacheService implements Cache {
 
 			dao.deleteByLowerCreationDate(new Date().getTime() - timeToLiveInSeconds);
 
-			long numberOfElementsToDelete = dao.countAll() - maxEntriesInDistantCache + 1;
+			long numberOfElementsToDelete = dao.countAll() - maxEntries + 1;
 
 			if (numberOfElementsToDelete >= 0) {
 				switch (evictionStrategyType) {
@@ -99,7 +115,7 @@ public class SpringDataCacheService implements Cache {
 
 		Assert.isInstanceOf(String.class, key, "The key should be a string");
 
-		dao.deleteById((String) key);
+		dao.deleteByKey((String) key);
 	}
 
 	@Override
@@ -107,7 +123,7 @@ public class SpringDataCacheService implements Cache {
 
 		Assert.isInstanceOf(String.class, key, "The key should be a string");
 
-		CachedValue cachedValue = dao.findById((String) key);
+		CacheEntry cachedValue = dao.findByKey((String) key);
 
 		if (cachedValue == null) {
 			return null;
@@ -119,11 +135,11 @@ public class SpringDataCacheService implements Cache {
 
 	@Override
 	public String getName() {
-		return entityType.getSimpleName();
+		return name;
 	}
 
 	@Override
-	public SpringDataCacheDao<CachedValue> getNativeCache() {
+	public SpringDataCacheDao getNativeCache() {
 		return dao;
 	}
 
@@ -135,23 +151,18 @@ public class SpringDataCacheService implements Cache {
 
 		cleanupOldCacheValues();
 
-		CachedValue cachedValue = dao.findById(key.toString());
+		CacheEntry cachedValue = dao.findByKey(key.toString());
 		long now = new Date().getTime();
 
 		if (cachedValue == null || now + timeToLiveInSeconds > cachedValue.getCreationDate()) {
 
-			try {
-				cachedValue = entityType.newInstance();
-				cachedValue.setCalls(0);
-				cachedValue.setCreationDate(now);
-				cachedValue.setId((String) key);
-				cachedValue.setValue((Serializable) value);
+			cachedValue = new CacheEntryImpl();
+			cachedValue.setCalls(0);
+			cachedValue.setCreationDate(now);
+			cachedValue.setKey((String) key);
+			cachedValue.setValue((Serializable) value);
 
-				dao.save(cachedValue);
-			}
-			catch (InstantiationException | IllegalAccessException e) {
-				LOGGER.error("Impossible to put element '{}' in the cache: {}", key, e.getMessage());
-			}
+			dao.save(cachedValue);
 		}
 		else {
 			cachedValue.setCalls(cachedValue.getCalls() + 1);
