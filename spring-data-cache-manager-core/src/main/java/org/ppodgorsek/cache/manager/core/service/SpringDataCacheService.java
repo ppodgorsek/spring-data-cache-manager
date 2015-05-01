@@ -16,29 +16,29 @@ import org.springframework.util.Assert;
 /**
  * TODO: each cache service should have a local cache that is used in priority, the Spring Data cache should be called asynchronously when persisting an entry
  * in order to maximise performance.
- * 
+ *
  * @author Paul Podgorsek
  */
 public class SpringDataCacheService implements Cache {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SpringDataCacheService.class);
 
-	private SpringDataCacheDao dao;
+	private final SpringDataCacheDao dao;
 
-	private String name;
+	private final String name;
 
-	private boolean eternal;
+	private final boolean eternal;
 
-	private EvictionStrategyType evictionStrategyType;
+	private final EvictionStrategyType evictionStrategyType;
 
-	private long maxEntries;
+	private final long maxEntries;
 
 	/**
 	 * TODO: check how are stats used by ehcache
 	 */
-	private boolean statistics;
+	private final boolean statistics;
 
-	private long timeToLiveInSeconds;
+	private final long timeToLiveInSeconds;
 
 	/**
 	 * <p>
@@ -56,11 +56,12 @@ public class SpringDataCacheService implements Cache {
 
 	/**
 	 * Create an {@link SpringDataCacheService} instance.
-	 * 
+	 *
 	 * @param cacheDao
 	 *            Backing Spring Data cache instance.
 	 */
-	public SpringDataCacheService(String name, SpringDataCacheDao cacheDao, long timeToLive, EvictionStrategyType evictionStrategyType, long maxEntriesInCache) {
+	public SpringDataCacheService(final String name, final SpringDataCacheDao cacheDao, final long timeToLive, final EvictionStrategyType evictionStrategyType,
+			final long maxEntriesInCache) {
 
 		Assert.notNull(name, "The name is required");
 		Assert.notNull(cacheDao, "The cache DAO is required");
@@ -87,9 +88,12 @@ public class SpringDataCacheService implements Cache {
 
 			dao.deleteByLowerCreationDate(new Date().getTime() - timeToLiveInSeconds);
 
-			long numberOfElementsToDelete = dao.countAll() - maxEntries + 1;
+			final long numberOfElementsToDelete = dao.countAll() - maxEntries + 1;
 
 			if (numberOfElementsToDelete >= 0) {
+
+				LOGGER.debug("Cleaning up the {} cache region using the {} eviction type", name, evictionStrategyType);
+
 				switch (evictionStrategyType) {
 					case LFU:
 						// TODO
@@ -111,7 +115,7 @@ public class SpringDataCacheService implements Cache {
 	}
 
 	@Override
-	public void evict(Object key) {
+	public void evict(final Object key) {
 
 		Assert.isInstanceOf(String.class, key, "The key should be a string");
 
@@ -119,11 +123,11 @@ public class SpringDataCacheService implements Cache {
 	}
 
 	@Override
-	public ValueWrapper get(Object key) {
+	public ValueWrapper get(final Object key) {
 
 		Assert.isInstanceOf(String.class, key, "The key should be a string");
 
-		CacheEntry cachedValue = dao.findByKey((String) key);
+		final CacheEntry cachedValue = dao.findByKey((String) key);
 
 		if (cachedValue == null) {
 			return null;
@@ -144,7 +148,7 @@ public class SpringDataCacheService implements Cache {
 	}
 
 	@Override
-	public void put(Object key, Object value) {
+	public void put(final Object key, final Object value) {
 
 		Assert.isInstanceOf(String.class, key, "The key should be a string");
 		Assert.isInstanceOf(Serializable.class, value, "The value must be serializable");
@@ -152,7 +156,7 @@ public class SpringDataCacheService implements Cache {
 		cleanupOldCacheValues();
 
 		CacheEntry cachedValue = dao.findByKey(key.toString());
-		long now = new Date().getTime();
+		final long now = new Date().getTime();
 
 		if (cachedValue == null || now + timeToLiveInSeconds > cachedValue.getCreationDate()) {
 

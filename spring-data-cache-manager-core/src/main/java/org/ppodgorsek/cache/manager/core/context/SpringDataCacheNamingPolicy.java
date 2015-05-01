@@ -17,15 +17,15 @@ public class SpringDataCacheNamingPolicy extends DefaultNamingPolicy implements 
 	/**
 	 * Default constructor.
 	 */
-	public SpringDataCacheNamingPolicy(String type, String name) {
+	public SpringDataCacheNamingPolicy(final String type, final String name) {
 
 		super();
 
 		Assert.notNull(type, "The type is required");
 		Assert.notNull(name, "The name is required");
 
-		String cleanType = StringUtils.capitalize(type.toLowerCase());
-		String cleanName = StringUtils.capitalize(name.toLowerCase());
+		final String cleanType = StringUtils.capitalize(type.toLowerCase());
+		final String cleanName = StringUtils.capitalize(name.toLowerCase());
 
 		tag = cleanName + cleanType + SUFFIX;
 	}

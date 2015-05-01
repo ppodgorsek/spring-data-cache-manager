@@ -23,11 +23,11 @@ public class SpringDataCacheConfigurationLoader implements ConfigurationLoader {
 	@Override
 	public List<CacheRegionConfiguration> getCacheRegionConfigurations() {
 
-		List<CacheRegionConfiguration> cacheRegionConfigurations = new ArrayList<CacheRegionConfiguration>();
+		final List<CacheRegionConfiguration> cacheRegionConfigurations = new ArrayList<CacheRegionConfiguration>();
 
 		// FIXME: this is just a cache that has been manually created, it must be removed when the config file is properly loaded.
 
-		CacheRegionConfiguration cacheRegionConfiguration = new CacheRegionConfiguration();
+		final CacheRegionConfiguration cacheRegionConfiguration = new CacheRegionConfiguration();
 		cacheRegionConfiguration.setEvictionStrategyType(EvictionStrategyType.LFU);
 		cacheRegionConfiguration.setMaxEntriesInCache(20);
 		cacheRegionConfiguration.setName("User");

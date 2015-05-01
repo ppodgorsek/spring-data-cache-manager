@@ -2,6 +2,8 @@ package org.ppodgorsek.cache.manager.core.model;
 
 import java.io.Serializable;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Persistent;
 
 /**
@@ -10,15 +12,42 @@ import org.springframework.data.annotation.Persistent;
 @Persistent
 public class CacheEntryImpl implements CacheEntry {
 
-	private long creationDate;
+	private static final long serialVersionUID = 2227302096962496577L;
 
+	@Id
 	private String key;
 
+	@Persistent
 	private Serializable value;
 
+	@Persistent
 	private String region;
 
+	@LastModifiedDate
+	private long creationDate;
+
+	@Persistent
 	private long calls;
+
+	@Override
+	public String getKey() {
+		return key;
+	}
+
+	@Override
+	public void setKey(final String key) {
+		this.key = key;
+	}
+
+	@Override
+	public Serializable getValue() {
+		return value;
+	}
+
+	@Override
+	public void setValue(final Serializable value) {
+		this.value = value;
+	}
 
 	@Override
 	public String getRegion() {
@@ -26,7 +55,7 @@ public class CacheEntryImpl implements CacheEntry {
 	}
 
 	@Override
-	public void setRegion(String region) {
+	public void setRegion(final String region) {
 		this.region = region;
 	}
 
@@ -36,28 +65,8 @@ public class CacheEntryImpl implements CacheEntry {
 	}
 
 	@Override
-	public String getKey() {
-		return key;
-	}
-
-	@Override
-	public Serializable getValue() {
-		return value;
-	}
-
-	@Override
-	public void setCreationDate(long creationDate) {
+	public void setCreationDate(final long creationDate) {
 		this.creationDate = creationDate;
-	}
-
-	@Override
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	@Override
-	public void setValue(Serializable value) {
-		this.value = value;
 	}
 
 	@Override
@@ -66,7 +75,7 @@ public class CacheEntryImpl implements CacheEntry {
 	}
 
 	@Override
-	public void setCalls(long calls) {
+	public void setCalls(final long calls) {
 		this.calls = calls;
 	}
 

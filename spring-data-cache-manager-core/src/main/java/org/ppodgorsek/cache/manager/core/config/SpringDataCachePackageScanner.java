@@ -21,12 +21,11 @@ public class SpringDataCachePackageScanner {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SpringDataCachePackageScanner.class);
 
-	private final Set<Class<?>> interfaces = new HashSet<Class<?>>();
-
 	private final Set<Class<? extends Annotation>> annotations = new HashSet<Class<? extends Annotation>>();
+	private final Set<Class<?>> interfaces = new HashSet<Class<?>>();
 	private final Set<String> packages;
 
-	public SpringDataCachePackageScanner(Set<String> packages) {
+	public SpringDataCachePackageScanner(final Set<String> packages) {
 
 		super();
 
@@ -35,14 +34,14 @@ public class SpringDataCachePackageScanner {
 		this.packages = packages;
 	}
 
-	public void addAnnotation(Class<? extends Annotation> annotation) {
+	public void addAnnotation(final Class<? extends Annotation> annotation) {
 
 		Assert.notNull(annotation, "The annotation is required");
 
 		annotations.add(annotation);
 	}
 
-	public void addInterface(Class<?> interfaceType) {
+	public void addInterface(final Class<?> interfaceType) {
 
 		Assert.notNull(interfaceType, "The interface type is required");
 
@@ -51,32 +50,32 @@ public class SpringDataCachePackageScanner {
 
 	public Set<Class<?>> scanForClasses() {
 
-		Set<Class<?>> classes = new HashSet<Class<?>>();
+		final Set<Class<?>> classes = new HashSet<Class<?>>();
 
-		for (String basePackage : packages) {
+		for (final String basePackage : packages) {
 			classes.addAll(scanBasePackage(basePackage));
 		}
 
 		return classes;
 	}
 
-	private Set<Class<?>> scanBasePackage(String basePackage) {
+	private Set<Class<?>> scanBasePackage(final String basePackage) {
 
-		Set<Class<?>> classes = new HashSet<Class<?>>();
+		final Set<Class<?>> classes = new HashSet<Class<?>>();
 
 		if (StringUtils.hasText(basePackage)) {
 
-			ClassPathScanningCandidateComponentProvider componentProvider = new ClassPathScanningCandidateComponentProvider(false);
+			final ClassPathScanningCandidateComponentProvider componentProvider = new ClassPathScanningCandidateComponentProvider(false);
 
-			for (Class<? extends Annotation> annotation : annotations) {
-				componentProvider.addIncludeFilter(new AnnotationTypeFilter(annotation));
+			for (final Class<? extends Annotation> annotation : annotations) {
+				componentProvider.addIncludeFilter(new AnnotationTypeFilter(annotation, false, true));
 			}
 
-			for (Class<?> interfaceType : interfaces) {
+			for (final Class<?> interfaceType : interfaces) {
 				componentProvider.addIncludeFilter(new InterfaceTypeFilter(interfaceType));
 			}
 
-			for (BeanDefinition candidate : componentProvider.findCandidateComponents(basePackage)) {
+			for (final BeanDefinition candidate : componentProvider.findCandidateComponents(basePackage)) {
 				try {
 					classes.add(ClassUtils.forName(candidate.getBeanClassName(), null));
 				}

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * This interface represents a cache entry stored by Spring Data.
- * 
+ *
  * @author Paul Podgorsek
  */
 public interface CacheEntry extends Serializable {
