@@ -36,7 +36,7 @@ public class SpringDataCacheService implements Cache {
 	/**
 	 * TODO: check how are stats used by ehcache
 	 */
-	private final boolean statistics;
+	private boolean statistics;
 
 	private final long timeToLiveInSeconds;
 
@@ -61,7 +61,7 @@ public class SpringDataCacheService implements Cache {
 	 *            Backing Spring Data cache instance.
 	 */
 	public SpringDataCacheService(final String name, final SpringDataCacheDao cacheDao, final long timeToLive, final EvictionStrategyType evictionStrategyType,
-			final long maxEntriesInCache) {
+			final long maxEntriesInCache, final boolean eternal) {
 
 		Assert.notNull(name, "The name is required");
 		Assert.notNull(cacheDao, "The cache DAO is required");
@@ -72,6 +72,7 @@ public class SpringDataCacheService implements Cache {
 		timeToLiveInSeconds = timeToLive;
 		this.evictionStrategyType = evictionStrategyType;
 		maxEntries = maxEntriesInCache;
+		this.eternal = eternal;
 	}
 
 	/**

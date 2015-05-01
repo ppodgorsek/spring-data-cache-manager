@@ -91,7 +91,7 @@ public class SpringDataCacheManager extends AbstractTransactionSupportingCacheMa
 			final SpringDataCacheDao dao = cacheAdapter.createDao(cacheRegionConfiguration);
 
 			final Cache springDataCache = new SpringDataCacheService(cacheName, dao, cacheRegionConfiguration.getTimeToLive(),
-					cacheRegionConfiguration.getEvictionStrategyType(), cacheRegionConfiguration.getMaxEntriesInCache());
+					cacheRegionConfiguration.getEvictionStrategyType(), cacheRegionConfiguration.getMaxEntriesInCache(), cacheRegionConfiguration.isEternal());
 
 			addCache(springDataCache);
 			caches.add(getCache(cacheName));

@@ -15,6 +15,8 @@ public class CacheRegionConfiguration {
 
 	private long maxEntriesInCache;
 
+	private boolean eternal;
+
 	/**
 	 * Default constructor.
 	 */
@@ -31,6 +33,7 @@ public class CacheRegionConfiguration {
 		builder.append(",timeToLive=").append(timeToLive);
 		builder.append(",evictionStrategyType=").append(evictionStrategyType);
 		builder.append(",maxEntriesInCache=").append(maxEntriesInCache);
+		builder.append(",eternal=").append(eternal);
 		builder.append("]");
 
 		return builder.toString();
@@ -84,8 +87,16 @@ public class CacheRegionConfiguration {
 		return maxEntriesInCache;
 	}
 
-	public void setMaxEntriesInCache(final long maxEntriesInCache) {
-		this.maxEntriesInCache = maxEntriesInCache;
+	public void setMaxEntriesInCache(final long maxEntries) {
+		maxEntriesInCache = maxEntries;
+	}
+
+	public boolean isEternal() {
+		return eternal;
+	}
+
+	public void setEternal(final boolean eternal) {
+		this.eternal = eternal;
 	}
 
 }
