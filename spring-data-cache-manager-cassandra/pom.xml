@@ -26,13 +26,13 @@
 			<artifactId>spring-data-cache-manager-core</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.ppodgorsek.cache</groupId>
+			<artifactId>spring-data-cache-manager-test</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-cassandra</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

@@ -11,9 +11,9 @@
 	</parent>
 
 	<groupId>org.ppodgorsek.cache</groupId>
-	<artifactId>spring-data-cache-manager-core</artifactId>
+	<artifactId>spring-data-cache-manager-test</artifactId>
 
-	<name>spring-data-cache-manager-core</name>
+	<name>spring-data-cache-manager-test</name>
 	<url>https://github.com/ppodgorsek/spring-data-cache-manager</url>
 
 	<properties>
@@ -22,17 +22,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.ppodgorsek.cache</groupId>
-			<artifactId>spring-data-cache-manager-test</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-commons</artifactId>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
 		</dependency>
 
 		<dependency>

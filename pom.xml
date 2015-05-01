@@ -26,6 +26,7 @@
 	</properties>
 
 	<modules>
+		<module>spring-data-cache-manager-test</module>
 		<module>spring-data-cache-manager-core</module>
 		<module>spring-data-cache-manager-cassandra</module>
 		<module>spring-data-ehcache-bridge</module>
@@ -42,6 +43,12 @@
 				<groupId>org.ppodgorsek.cache</groupId>
 				<artifactId>spring-data-cache-manager-cassandra</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ppodgorsek.cache</groupId>
+				<artifactId>spring-data-cache-manager-test</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
 			</dependency>
 
 			<dependency>
@@ -94,7 +101,6 @@
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>${junit.version}</version>
-				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
