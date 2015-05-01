@@ -6,18 +6,17 @@ import org.ppodgorsek.cache.manager.core.config.ConfigurationLoader;
 import org.ppodgorsek.cache.manager.core.model.CacheRegionConfiguration;
 
 /**
- * FIXME: move this to a separate module? (could be added on the classpath only if required by ehcache users)
- * 
+ * This module should be added to the classpath only if required by ehcache users.
+ *
  * @author Paul Podgorsek
  */
 public class EhcacheConfigurationLoader implements ConfigurationLoader {
 
 	/**
-	 * 
+	 * Default constructor.
 	 */
 	public EhcacheConfigurationLoader() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
