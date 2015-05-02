@@ -1,6 +1,6 @@
 package org.ppodgorsek.cache.manager.core.config;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.ppodgorsek.cache.manager.core.model.CacheRegionConfiguration;
 
@@ -9,6 +9,6 @@ import org.ppodgorsek.cache.manager.core.model.CacheRegionConfiguration;
  */
 public interface ConfigurationLoader {
 
-	List<CacheRegionConfiguration> getCacheRegionConfigurations();
+	Collection<CacheRegionConfiguration> getCacheRegionConfigurations();
 
 }

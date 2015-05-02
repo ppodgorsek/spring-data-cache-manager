@@ -7,19 +7,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.ppodgorsek.cache.manager.core.adapter.SpringDataCacheAdapter;
 import org.ppodgorsek.cache.manager.core.annotation.CacheAdapter;
 import org.ppodgorsek.cache.manager.core.config.ConfigurationLoader;
-import org.ppodgorsek.cache.manager.core.config.SpringDataCacheConfigurationLoader;
-import org.ppodgorsek.cache.manager.core.config.SpringDataCachePackageScanner;
+import org.ppodgorsek.cache.manager.core.config.impl.SpringDataCacheConfigurationLoader;
+import org.ppodgorsek.cache.manager.core.config.impl.SpringDataCachePackageScanner;
 import org.ppodgorsek.cache.manager.core.dao.SpringDataCacheDao;
 import org.ppodgorsek.cache.manager.core.model.CacheRegionConfiguration;
 import org.ppodgorsek.cache.manager.core.service.SpringDataCacheService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.transaction.AbstractTransactionSupportingCacheManager;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 
 /**
@@ -28,21 +33,23 @@ import org.springframework.util.Assert;
  *
  * @author Paul Podgorsek
  */
-public class SpringDataCacheManager extends AbstractTransactionSupportingCacheManager implements CacheManager {
+public class SpringDataCacheManager extends AbstractTransactionSupportingCacheManager implements CacheManager, ApplicationContextAware {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SpringDataCacheManager.class);
 
 	private static final String DEFAULT_BASE_PACKAGE = "org.ppodgorsek.cache.manager";
 
-	private final ConfigurationLoader configurationLoader;
+	private ApplicationContext applicationContext;
+
+	private ConfigurationLoader configurationLoader;
 
 	private final Set<String> basePackages;
 
 	/**
-	 * Constructor that uses a default configuration loader.
+	 * Default constructor.
 	 */
 	public SpringDataCacheManager() {
-		this(new SpringDataCacheConfigurationLoader());
+		this(null);
 	}
 
 	/**
@@ -67,11 +74,21 @@ public class SpringDataCacheManager extends AbstractTransactionSupportingCacheMa
 
 		super();
 
-		Assert.notNull(configurationLoader, "The configuration loader is required");
 		Assert.notNull(basePackages, "The base packages are required");
 
-		this.configurationLoader = configurationLoader;
 		this.basePackages = basePackages;
+		this.configurationLoader = configurationLoader;
+	}
+
+	/**
+	 * If no configuration loader was defined, a default one will be created which will look up cache configuration beans in the application context.
+	 */
+	@PostConstruct
+	public void initValues() {
+
+		if (configurationLoader == null) {
+			configurationLoader = new SpringDataCacheConfigurationLoader(applicationContext);
+		}
 	}
 
 	@Override
@@ -139,6 +156,11 @@ public class SpringDataCacheManager extends AbstractTransactionSupportingCacheMa
 			LOGGER.error("Impossible to create a new instance of the {} class: {}", clazz, e.getMessage());
 			throw new IllegalArgumentException("A cache adapter couldn't be instantiated", e);
 		}
+	}
+
+	@Override
+	public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
 	}
 
 }

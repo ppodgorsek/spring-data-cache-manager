@@ -1,9 +1,10 @@
-package org.ppodgorsek.cache.manager.core.config;
+package org.ppodgorsek.cache.manager.core.config.impl;
 
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.ppodgorsek.cache.manager.core.config.PackageScanner;
 import org.ppodgorsek.cache.manager.core.filter.InterfaceTypeFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,7 @@ import org.springframework.util.StringUtils;
 /**
  * @author Paul Podgorsek
  */
-public class SpringDataCachePackageScanner {
+public class SpringDataCachePackageScanner implements PackageScanner {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SpringDataCachePackageScanner.class);
 
@@ -48,6 +49,7 @@ public class SpringDataCachePackageScanner {
 		interfaces.add(interfaceType);
 	}
 
+	@Override
 	public Set<Class<?>> scanForClasses() {
 
 		final Set<Class<?>> classes = new HashSet<Class<?>>();
