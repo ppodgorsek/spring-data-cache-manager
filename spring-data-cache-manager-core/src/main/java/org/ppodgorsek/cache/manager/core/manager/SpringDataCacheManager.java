@@ -12,7 +12,6 @@ import org.ppodgorsek.cache.manager.core.annotation.CacheAdapter;
 import org.ppodgorsek.cache.manager.core.config.ConfigurationLoader;
 import org.ppodgorsek.cache.manager.core.config.SpringDataCacheConfigurationLoader;
 import org.ppodgorsek.cache.manager.core.config.SpringDataCachePackageScanner;
-import org.ppodgorsek.cache.manager.core.context.SpringDataCacheNamingPolicy;
 import org.ppodgorsek.cache.manager.core.dao.SpringDataCacheDao;
 import org.ppodgorsek.cache.manager.core.model.CacheRegionConfiguration;
 import org.ppodgorsek.cache.manager.core.service.SpringDataCacheService;
@@ -21,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.transaction.AbstractTransactionSupportingCacheManager;
-import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.util.Assert;
 
 /**
@@ -128,18 +126,19 @@ public class SpringDataCacheManager extends AbstractTransactionSupportingCacheMa
 		return supportedAdapters;
 	}
 
-	@SuppressWarnings("unchecked")
 	private <T> T generateEnhancedObject(final Map<String, Class<? extends T>> classes, final String cacheType, final String cacheName) {
 
 		final Class<? extends T> clazz = classes.get(cacheType);
 
 		Assert.notNull(clazz, "Unknown cache type: " + cacheType);
 
-		final Enhancer enhancer = new Enhancer();
-		enhancer.setInterfaces(new Class<?>[] { clazz });
-		enhancer.setNamingPolicy(new SpringDataCacheNamingPolicy(cacheType, cacheName));
-
-		return (T) enhancer.create();
+		try {
+			return clazz.newInstance();
+		}
+		catch (InstantiationException | IllegalAccessException e) {
+			LOGGER.error("Impossible to create a new instance of the {} class: {}", clazz, e.getMessage());
+			throw new IllegalArgumentException("A cache adapter couldn't be instantiated", e);
+		}
 	}
 
 }
