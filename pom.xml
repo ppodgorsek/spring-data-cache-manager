@@ -26,8 +26,8 @@
 	</properties>
 
 	<modules>
-		<module>spring-data-cache-manager-test</module>
 		<module>spring-data-cache-manager-core</module>
+		<module>spring-data-cache-manager-test</module>
 		<module>spring-data-cache-manager-cassandra</module>
 		<module>spring-data-ehcache-bridge</module>
 	</modules>
