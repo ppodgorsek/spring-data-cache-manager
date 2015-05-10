@@ -14,6 +14,7 @@
 	<artifactId>spring-data-ehcache-bridge</artifactId>
 
 	<name>spring-data-ehcache-bridge</name>
+	<description>This module should be added to the classpath only if required by ehcache users.</description>
 	<url>https://github.com/ppodgorsek/spring-data-cache-manager</url>
 
 	<properties>
@@ -28,6 +29,11 @@
 		<dependency>
 			<groupId>org.ppodgorsek.cache</groupId>
 			<artifactId>spring-data-cache-manager-test</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
 		</dependency>
 	</dependencies>
 
