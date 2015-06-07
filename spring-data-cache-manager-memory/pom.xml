@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.ppodgorsek.cache</groupId>
+		<artifactId>spring-data-cache-manager</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.ppodgorsek.cache</groupId>
+	<artifactId>spring-data-cache-manager-memory</artifactId>
+
+	<name>spring-data-cache-manager-memory</name>
+	<url>https://github.com/ppodgorsek/spring-data-cache-manager</url>
+
+	<properties>
+		<config.path.prefix>../</config.path.prefix>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.ppodgorsek.cache</groupId>
+			<artifactId>spring-data-cache-manager-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.ppodgorsek.cache</groupId>
+			<artifactId>spring-data-cache-manager-test</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>
