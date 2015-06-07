@@ -7,6 +7,6 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @author Paul Podgorsek
  */
 @NoRepositoryBean
-public interface CassandraSpringDataCacheDao extends SpringDataCacheDao {
+public interface CassandraCacheDao extends SpringDataCacheDao {
 
 }

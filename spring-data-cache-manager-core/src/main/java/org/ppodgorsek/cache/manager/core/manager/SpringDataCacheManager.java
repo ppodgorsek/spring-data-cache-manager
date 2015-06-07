@@ -16,7 +16,7 @@ import org.ppodgorsek.cache.manager.core.config.impl.SpringDataCacheConfiguratio
 import org.ppodgorsek.cache.manager.core.config.impl.SpringDataCachePackageScanner;
 import org.ppodgorsek.cache.manager.core.dao.SpringDataCacheDao;
 import org.ppodgorsek.cache.manager.core.model.CacheRegionConfiguration;
-import org.ppodgorsek.cache.manager.core.service.SpringDataCacheService;
+import org.ppodgorsek.cache.manager.core.service.impl.SpringDataCacheServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -56,17 +56,17 @@ public class SpringDataCacheManager extends AbstractTransactionSupportingCacheMa
 	 * Constructor that allows to set the configuration loader.
 	 *
 	 * @param configurationLoader
-	 *            The configuration loader (mustn't be <code>null</code>).
+	 *            The configuration loader.
 	 */
 	public SpringDataCacheManager(final ConfigurationLoader configurationLoader) {
 		this(configurationLoader, Collections.singleton(DEFAULT_BASE_PACKAGE));
 	}
 
 	/**
-	 * Constructor that allows to set the configuration loader.
+	 * Constructor that allows to set the configuration loader and the packages that will be scanned.
 	 *
 	 * @param configurationLoader
-	 *            The configuration loader (mustn't be <code>null</code>).
+	 *            The configuration loader.
 	 * @param basePackages
 	 *            The packages that must be scanned in order to find the DAOs and adapters.
 	 */
@@ -102,11 +102,11 @@ public class SpringDataCacheManager extends AbstractTransactionSupportingCacheMa
 			LOGGER.debug("Creating a new cache region: {}", cacheRegionConfiguration);
 
 			final String cacheName = cacheRegionConfiguration.getName();
-			final SpringDataCacheAdapter cacheAdapter = generateEnhancedObject(cacheAdapters, cacheRegionConfiguration.getType(), cacheName);
+			final SpringDataCacheAdapter cacheAdapter = instantiateObject(cacheAdapters, cacheRegionConfiguration.getType(), cacheName);
 			final SpringDataCacheDao dao = cacheAdapter.createDao(cacheRegionConfiguration);
 
-			final Cache springDataCache = new SpringDataCacheService(cacheName, dao, cacheRegionConfiguration.getTimeToLive(),
-					cacheRegionConfiguration.getEvictionStrategyType(), cacheRegionConfiguration.getMaxEntriesInCache(), cacheRegionConfiguration.isEternal());
+			final Cache springDataCache = new SpringDataCacheServiceImpl(cacheName, dao, cacheRegionConfiguration.getTimeToLive(),
+					cacheRegionConfiguration.getEvictionStrategy(), cacheRegionConfiguration.getMaxEntriesInCache(), cacheRegionConfiguration.isEternal());
 
 			addCache(springDataCache);
 			caches.add(getCache(cacheName));
@@ -143,7 +143,7 @@ public class SpringDataCacheManager extends AbstractTransactionSupportingCacheMa
 		return supportedAdapters;
 	}
 
-	private <T> T generateEnhancedObject(final Map<String, Class<? extends T>> classes, final String cacheType, final String cacheName) {
+	private <T> T instantiateObject(final Map<String, Class<? extends T>> classes, final String cacheType, final String cacheName) {
 
 		final Class<? extends T> clazz = classes.get(cacheType);
 

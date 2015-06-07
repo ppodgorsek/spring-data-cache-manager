@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.ppodgorsek.cache.manager.cassandra.CassandraCacheMetadata;
-import org.ppodgorsek.cache.manager.cassandra.dao.CassandraSpringDataCacheDao;
+import org.ppodgorsek.cache.manager.cassandra.dao.CassandraCacheDao;
 import org.ppodgorsek.cache.manager.core.adapter.SpringDataCacheAdapter;
 import org.ppodgorsek.cache.manager.core.annotation.CacheAdapter;
 import org.ppodgorsek.cache.manager.core.context.SpringDataCacheNamingPolicy;
@@ -54,14 +54,14 @@ public class CassandraCacheAdapter implements SpringDataCacheAdapter {
 	private <T> T generateEnhancedObject(final String cacheType, final String cacheName) {
 
 		final Enhancer enhancer = new Enhancer();
-		enhancer.setInterfaces(new Class<?>[] { CassandraSpringDataCacheDao.class });
+		enhancer.setInterfaces(new Class<?>[] { CassandraCacheDao.class });
 		enhancer.setNamingPolicy(new SpringDataCacheNamingPolicy(cacheType, cacheName));
 		enhancer.setInterceptDuringConstruction(false);
 
 		// TODO: remove?
 		// enhancer.setStrategy(new MemorySafeUndeclaredThrowableStrategy(UndeclaredThrowableException.class));
 
-		final Callback[] callbacks = getCallbacks(CassandraSpringDataCacheDao.class);
+		final Callback[] callbacks = getCallbacks(CassandraCacheDao.class);
 		final Class<?>[] types = new Class<?>[callbacks.length];
 
 		for (int x = 0; x < types.length; x++) {

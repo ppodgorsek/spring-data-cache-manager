@@ -5,6 +5,7 @@ import java.io.Serializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Persistent;
+import org.springframework.util.ObjectUtils;
 
 /**
  * @author Paul Podgorsek
@@ -12,7 +13,7 @@ import org.springframework.data.annotation.Persistent;
 @Persistent
 public class CacheEntryImpl implements CacheEntry {
 
-	private static final long serialVersionUID = 2227302096962496577L;
+	private static final long serialVersionUID = 1240684252380601476L;
 
 	@Id
 	private String key;
@@ -28,6 +29,28 @@ public class CacheEntryImpl implements CacheEntry {
 
 	@Persistent
 	private long calls;
+
+	@Override
+	public boolean equals(final Object object) {
+
+		if (this == object) {
+			return true;
+		}
+
+		if (object instanceof CacheEntryImpl) {
+
+			final CacheEntryImpl cacheEntryImpl = (CacheEntryImpl) object;
+
+			return ObjectUtils.nullSafeEquals(key, cacheEntryImpl.getKey()) && ObjectUtils.nullSafeEquals(region, cacheEntryImpl.getRegion());
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return ObjectUtils.nullSafeHashCode(key);
+	};
 
 	@Override
 	public String getKey() {

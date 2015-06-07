@@ -38,7 +38,7 @@ public interface SpringDataCacheDao extends Repository<CacheEntry, String> {
 	 * @param date
 	 *            The date before which the entries must be deleted (mustn't be <code>null</code>).
 	 */
-	void deleteByLowerCreationDate(long date);
+	void deleteByCreationDateLessThan(long date);
 
 	/**
 	 * Finds a cache entry by its key.

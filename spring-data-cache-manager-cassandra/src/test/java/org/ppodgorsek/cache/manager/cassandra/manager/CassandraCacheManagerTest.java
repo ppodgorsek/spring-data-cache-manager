@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { SpringDataCacheManagerContext.class, CassandraCacheRegionConfigurationContext.class })
-public class SpringDataCassandraCacheManagerTest {
+public class CassandraCacheManagerTest {
 
 	@Resource
 	private SpringDataCacheManager springDataCacheManager;
@@ -40,6 +40,14 @@ public class SpringDataCassandraCacheManagerTest {
 		final Cache cache = springDataCacheManager.getCache("unknown-cache");
 
 		assertNull("The cache shouldn't exist", cache);
+	}
+
+	@Test
+	public void test() {
+
+		final Cache cache = springDataCacheManager.getCache("user");
+
+		cache.clear();
 	}
 
 }

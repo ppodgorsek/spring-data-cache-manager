@@ -5,7 +5,12 @@ package org.ppodgorsek.cache.manager.core.model;
  *
  * @author Paul Podgorsek
  */
-public enum EvictionStrategyType {
+public enum EvictionStrategy {
+
+	/**
+	 * First in, first out.
+	 */
+	FIFO,
 
 	/**
 	 * Least frequently used.

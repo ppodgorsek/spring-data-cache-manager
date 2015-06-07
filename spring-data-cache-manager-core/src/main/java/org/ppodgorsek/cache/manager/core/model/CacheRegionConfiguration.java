@@ -11,9 +11,9 @@ public class CacheRegionConfiguration {
 
 	private long timeToLive;
 
-	private EvictionStrategyType evictionStrategyType;
+	private EvictionStrategy evictionStrategy;
 
-	private long maxEntriesInCache;
+	private int maxEntriesInCache;
 
 	private boolean eternal;
 
@@ -31,7 +31,7 @@ public class CacheRegionConfiguration {
 		builder.append("[name=").append(name);
 		builder.append(",type=").append(type);
 		builder.append(",timeToLive=").append(timeToLive);
-		builder.append(",evictionStrategyType=").append(evictionStrategyType);
+		builder.append(",evictionStrategy=").append(evictionStrategy);
 		builder.append(",maxEntriesInCache=").append(maxEntriesInCache);
 		builder.append(",eternal=").append(eternal);
 		builder.append("]");
@@ -75,19 +75,19 @@ public class CacheRegionConfiguration {
 		this.timeToLive = timeToLive;
 	}
 
-	public EvictionStrategyType getEvictionStrategyType() {
-		return evictionStrategyType;
+	public EvictionStrategy getEvictionStrategy() {
+		return evictionStrategy;
 	}
 
-	public void setEvictionStrategyType(final EvictionStrategyType evictionStrategyType) {
-		this.evictionStrategyType = evictionStrategyType;
+	public void setEvictionStrategy(final EvictionStrategy evictionStrategy) {
+		this.evictionStrategy = evictionStrategy;
 	}
 
-	public long getMaxEntriesInCache() {
+	public int getMaxEntriesInCache() {
 		return maxEntriesInCache;
 	}
 
-	public void setMaxEntriesInCache(final long maxEntries) {
+	public void setMaxEntriesInCache(final int maxEntries) {
 		maxEntriesInCache = maxEntries;
 	}
 
