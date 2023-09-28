@@ -23,7 +23,7 @@
 		<log4j.version>1.2.14</log4j.version>
 		<slf4j.version>1.5.8</slf4j.version>
 		<spring-data.version>Dijkstra-SR5</spring-data.version>
-		<spring-framework.version>3.2.13.RELEASE</spring-framework.version>
+		<spring-framework.version>4.3.30.RELEASE</spring-framework.version>
 	</properties>
 
 	<modules>
